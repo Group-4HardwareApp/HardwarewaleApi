@@ -23,9 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.hardwaremartapi.bean.Order;
 import com.hardwaremartapi.bean.OrderCart;
+import com.hardwaremartapi.bean.OrderItems;
 import com.hardwaremartapi.exception.ResourceNotFoundException;
 import com.hardwaremartapi.service.OrderService;
 import com.hardwaremartapi.bean.PurchaseOrder;
+import com.hardwaremartapi.bean.Reorder;
 
 @RestController
 @RequestMapping("/order")
@@ -118,7 +120,6 @@ public class OrderController {
 			return new ResponseEntity<List<Order>>(order, HttpStatus.OK);
 		else
 			throw new ResourceNotFoundException("Order not found");
-
 	}
 
 	@GetMapping("/orderHistory/{shopKeeperId}")
@@ -139,5 +140,16 @@ public class OrderController {
 			return new ResponseEntity<ArrayList<PurchaseOrder>>(orderList, HttpStatus.OK);
 		else
 			throw new ResourceNotFoundException("Order Not Found");
+	}
+	
+	@PostMapping("/reOrder/getQuantity")
+	public ResponseEntity<ArrayList<Reorder>> getQuantityOfOrderItems(@RequestBody Order order) throws InterruptedException, ExecutionException, ResourceNotFoundException{
+		ArrayList<OrderItems> orderItemsList = order.getItemList();
+		ArrayList<Reorder> reOrders = orderService.getQuantityOfOrderItems(orderItemsList);
+		
+		if (reOrders == null) {
+			throw new ResourceNotFoundException("Order Not Found");
+		}
+		return new ResponseEntity<ArrayList<Reorder>>(reOrders,HttpStatus.OK);
 	}
 }
