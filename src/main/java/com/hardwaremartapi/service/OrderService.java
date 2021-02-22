@@ -25,7 +25,9 @@ import com.hardwaremartapi.FileUtility;
 import com.hardwaremartapi.bean.Order;
 import com.hardwaremartapi.bean.OrderCart;
 import com.hardwaremartapi.bean.OrderItems;
+import com.hardwaremartapi.bean.Product;
 import com.hardwaremartapi.bean.PurchaseOrder;
+import com.hardwaremartapi.bean.Reorder;
 
 @Service
 public class OrderService {
@@ -240,5 +242,25 @@ public class OrderService {
 			}
 		}
 		return purchaseOrderList;
+	}
+	
+	public ArrayList<Reorder> getQuantityOfOrderItems(ArrayList<OrderItems> orderItemsList) throws InterruptedException, ExecutionException {
+		Firestore firestore = FirestoreClient.getFirestore();
+		ArrayList<Reorder> reOrders = new ArrayList<>();
+		int size = orderItemsList.size();
+		System.out.print(""+size);
+		for(OrderItems orderItems : orderItemsList) {
+			String productId = orderItems.getProductId();
+			System.out.print(""+orderItems.getProductId());
+			Product product = firestore.collection("Product").document(productId).get().get().toObject(Product.class);
+			Reorder reOrder = new Reorder();
+			reOrder.setQtyInStock(product.getQtyInStock());
+			reOrder.setPrice(product.getPrice());
+			reOrder.setOrderItems(orderItems);
+			reOrder.setDiscount(product.getDiscount());
+
+			reOrders.add(reOrder);
+		}
+		return reOrders;
 	}
 }
