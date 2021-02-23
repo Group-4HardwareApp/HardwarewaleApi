@@ -299,7 +299,6 @@ public class ProductService {
 			String thirdImageUrl = new FileUtility().uploadFile(files.get(2));
 			product.setThirdImageurl(thirdImageUrl);
 			System.out.println("img3" + thirdImageUrl);
-
 		}
 		product.setTimestamp(System.currentTimeMillis());
 		firestoredatabase.collection("Product").document(productId).set(product);
