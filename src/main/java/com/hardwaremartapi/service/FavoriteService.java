@@ -15,7 +15,6 @@ import com.hardwaremartapi.exception.ResourceNotFoundException;
 @Service
 public class FavoriteService {
 	
-
 	public Favorite addFavorite(Favorite favorite) throws IOException {
 		Firestore firestore = FirestoreClient.getFirestore();
 		String favoriteId = firestore.collection("Favorite").document().getId().toString();

@@ -32,8 +32,6 @@ import com.hardwaremartapi.bean.Reorder;
 @Service
 public class OrderService {
 
-	OrderItems orderItem = new OrderItems();
-
 	public Order placeOrders(Order order) {
 		Firestore fireStore = FirestoreClient.getFirestore();
 		String orderId = fireStore.collection("Order").document().getId().toString();
@@ -57,7 +55,6 @@ public class OrderService {
 		Order order = fireStore.collection("Order").document(id).get().get().toObject(Order.class);
 		return order;
 	}
-
 
 	public Order deleteOrder(String orderId) throws InterruptedException, ExecutionException {
 		Firestore fireStore = FirestoreClient.getFirestore();
@@ -258,7 +255,6 @@ public class OrderService {
 			reOrder.setPrice(product.getPrice());
 			reOrder.setOrderItems(orderItems);
 			reOrder.setDiscount(product.getDiscount());
-
 			reOrders.add(reOrder);
 		}
 		return reOrders;
